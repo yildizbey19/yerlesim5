@@ -132,7 +132,7 @@ def main():
                 
                 # Stilize edilmiş tabloyu göster
                 styled_all_results_df = all_results_df.style.set_table_styles(
-                    [{'selector': 'th', 'props': [('background-color', '#87cefa'), ('color', 'white'), ('font-weight', 'bold')]}]
+                    [{'selector': 'th', 'props': [('background-color', '#2B2B2B'), ('color', 'white'), ('font-weight', 'bold')]}]
                 ).applymap(lambda _: 'background-color: #FFFFFF; color: #000000')
                 
                 st.table(styled_all_results_df.set_properties(**{'text-align': 'center'}))
