@@ -112,8 +112,8 @@ def main():
 
             # Tabloyu stilize et
             styled_df = result_df.style.set_table_styles(
-                [{'selector': 'th', 'props': [('background-color', '#87CEFA'), ('color', 'white'), ('font-weight', 'bold')]}]
-            ).applymap(lambda _: 'background-color: #00CED1; color: #000000')
+                [{'selector': 'th', 'props': [('background-color', '#2B2B2B'), ('color', 'white'), ('font-weight', 'bold')]}]
+            ).applymap(lambda _: 'background-color: #87CEFA; color: #000000')
 
             st.table(styled_df.set_properties(**{'text-align': 'center'}))
 
