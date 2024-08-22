@@ -129,7 +129,7 @@ def main():
                 st.table(styled_all_results_df.set_properties(**{'text-align': 'center'}))
             
             # Malzeme koduna göre maliyet gösterimi
-            st.header("Malzeme Koduna Göre Taşıma Maliyeti")
+            st.header("Optimum Düzen İçin Malzeme Koduna Göre Taşıma Maliyeti")
 
             selected_material = st.selectbox("Bir malzeme kodu seçin", df['malzeme kodu'].unique())
             if selected_material:
@@ -148,7 +148,7 @@ def main():
                 st.write(f"Seçilen ({selected_material}) kodlu malzeme  için toplam taşıma maliyeti: {adjusted_cost}")
 
             # Nereden Nereye Seçimi ve Malzeme Gösterimi
-            st.header("En İyi Kombinasyona Göre Bölümden Bölüme Toplam Taşıma Maliyeti")
+            st.header("Optimum Düzen İçin Bölümden Bölüme Toplam Taşıma Maliyeti")
 
             start_location = st.selectbox("Nereden", df['nerden'].unique())
             end_location = st.selectbox("Nereye", df['nereye'].unique())
@@ -164,8 +164,8 @@ def main():
                 best_distance = get_distance(best_start_location, best_end_location, distance_df)
                 adjusted_cost = total_cost * best_distance
                 
-                st.write(f"{start_location} bölümünden, {end_location} bölümüne taşınan malzeme kodları: {malzeme_kodları}")
-                st.write(f"Optimum yerleşim düzeni için {best_start_location} bölümünden {best_end_location} bölümüne taşınan malzemelerin toplam taşıma maliyeti: {adjusted_cost}")
+                st.write(f"{start_location} bölümünden ({best_start_location}'da yer alıyor), {end_location} bölümüne ({best_end_location}'da yer alıyor) taşınan malzeme kodları: {malzeme_kodları}")
+                st.write(f"Optimum yerleşim düzeni için {start_location} bölümünden {end_location} bölümüne taşınan malzemelerin toplam taşıma maliyeti: {adjusted_cost}")
                 
                 
 
