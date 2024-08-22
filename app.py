@@ -133,7 +133,7 @@ def main():
 
             selected_material = st.selectbox("Bir malzeme kodu seçin", df['Malzeme Kodu'].unique())
             if selected_material:
-                selected_material_df = df[df['malzeme kodu'] == selected_material]
+                selected_material_df = df[df['Malzeme Kodu'] == selected_material]
                 cıkıs = selected_material_df['Nereden'].values[0]
                 varıs = selected_material_df['Nereye'].values[0]# En iyi kombinasyona göre yerleşim yerleri bulun
                 best_cıkıs = best_combination.get(cıkıs, cıkıs)
