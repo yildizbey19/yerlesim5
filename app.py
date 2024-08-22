@@ -43,16 +43,16 @@ def calculate_total_cost(mapping, df, distance_df):
     return total_cost
 
 def get_user_input(cıkıs, varıs, df, distance_df):
-    filtered_df = df[(df['nerden'] == cıkıs) & (df['nereye'] == varıs)]
+    filtered_df = df[(df['Nereden'] == cıkıs) & (df['Nereye'] == varıs)]
     total_cost = 0
     malzeme_kodları = []
     for _, row in filtered_df.iterrows():
-        F = float(str(row['sıklık']).replace(',', '.'))
-        OHM = float(str(row['birim maliyet']).replace(',', '.'))
+        F = float(str(row['Sıklık']).replace(',', '.'))
+        OHM = float(str(row['Birim Maliyet']).replace(',', '.'))
         distance = get_distance(cıkıs, varıs, distance_df)
         cost = F * OHM * distance
         total_cost += cost
-        malzeme_kodları.append(row['malzeme kodu'])
+        malzeme_kodları.append(row['Malzeme Kodu'])
     return total_cost, malzeme_kodları
 
 def get_distance(cıkıs, varıs, distance_df):
