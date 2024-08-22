@@ -37,7 +37,7 @@ def calculate_total_cost(mapping, df, distance_df):
     for var1 in varcomp:
         for var2 in varcomp:
             if var1 != var2:
-                cost = get_user_input(var1, var2, df, distance_df)
+                cost, _ = get_user_input(var1, var2, df, distance_df)
                 distance = get_distance(mapping[var1], mapping[var2], distance_df)
                 total_cost += cost * distance
     return total_cost
@@ -52,9 +52,8 @@ def get_user_input(cıkıs, varıs, df, distance_df):
         distance = get_distance(cıkıs, varıs, distance_df)
         cost = F * OHM * distance
         total_cost += cost
-        malzeme_kodları.append(row['malzeme kodu'])  # Malzeme kodlarını toplama
-    return total_cost, malzeme_kodları  # İki değer döndürme
-
+        malzeme_kodları.append(row['malzeme kodu'])
+    return total_cost, malzeme_kodları
 
 def get_distance(cıkıs, varıs, distance_df):
     try:
@@ -65,7 +64,6 @@ def get_distance(cıkıs, varıs, distance_df):
             return 1
     except KeyError:
         return 1
-
 
 def main():
     st.title("Taşıma Maliyeti Hesabına Göre Değişkenlere Yerleşim Yeri Ata")
@@ -94,6 +92,9 @@ def main():
                 best_combination = mapping
         
         if best_combination:
+          
+            st.header("Optimum Yerleşim Düzeni")
+
             result_df = pd.DataFrame(list(best_combination.items()), columns=["Değişkenler", "Yerleşeceği Yerler"])
             result_df = result_df[result_df["Değişkenler"].isin(variables)]
 
@@ -110,7 +111,10 @@ def main():
             st.write(f"Toplam maliyet: {min_cost}")
 
             # Kullanıcıya diğer tüm kombinasyonları görme seçeneği sun
-            if st.checkbox("Olası tüm kombinasyonların maliyetlerini göster"):
+            st.header(" Diğer Kombinasyonların Taşıma Maliyetleri")
+
+
+            if st.checkbox("Bütün kombinasyonların maliyetlerini görmek için tıklayınız"):
                 all_results_df = pd.DataFrame(
                     [(dict(zip(variables, combo)), cost) for combo, cost in all_results],
                     columns=["Kombinasyon", "Maliyet"]
@@ -125,26 +129,46 @@ def main():
                 st.table(styled_all_results_df.set_properties(**{'text-align': 'center'}))
             
             # Malzeme koduna göre maliyet gösterimi
+            st.header("Malzeme Koduna Göre Taşıma Maliyeti")
+
             selected_material = st.selectbox("Bir malzeme kodu seçin", df['malzeme kodu'].unique())
             if selected_material:
                 selected_material_df = df[df['malzeme kodu'] == selected_material]
-                total_cost, _ = get_user_input(
-                    selected_material_df['nerden'].values[0], 
-                    selected_material_df['nereye'].values[0], 
-                    df, distance_df
-                )
-                st.write(f"Seçilen malzeme ({selected_material}) için toplam taşıma maliyeti: {total_cost}")
+                cıkıs = selected_material_df['nerden'].values[0]
+                varıs = selected_material_df['nereye'].values[0]# En iyi kombinasyona göre yerleşim yerleri bulun
+                best_cıkıs = best_combination.get(cıkıs, cıkıs)
+                best_varıs = best_combination.get(varıs, varıs)
+                
+                # Seçilen malzeme için toplam maliyeti hesapla
+                total_cost, _ = get_user_input(cıkıs, varıs, selected_material_df, distance_df)
+                
+                # En iyi kombinasyona göre yeniden hesapla
+                best_distance = get_distance(best_cıkıs, best_varıs, distance_df)
+                adjusted_cost = total_cost * best_distance
+                st.write(f"Seçilen ({selected_material}) kodlu malzeme  için toplam taşıma maliyeti: {adjusted_cost}")
 
             # Nereden Nereye Seçimi ve Malzeme Gösterimi
+            st.header("En İyi Kombinasyona Göre Bölümden Bölüme Toplam Taşıma Maliyeti")
+
             start_location = st.selectbox("Nereden", df['nerden'].unique())
             end_location = st.selectbox("Nereye", df['nereye'].unique())
             
             if start_location and end_location:
-                total_cost = get_user_input(start_location, end_location, df, distance_df)
-                st.write(f"Nereden: {start_location}, Nereye: {end_location} için toplam maliyet: {total_cost}")
+                # En iyi kombinasyona göre yerleşim yeri bulun
+                best_start_location = best_combination.get(start_location, start_location)
+                best_end_location = best_combination.get(end_location, end_location)
+                # Seçilen lokasyonlar için toplam maliyeti hesapla
+                total_cost, malzeme_kodları = get_user_input(start_location, end_location, df, distance_df)
                 
-        else:
-            st.write("Geçerli bir kombinasyon bulunamadı.")
+                # En iyi kombinasyona göre yeniden hesapla
+                best_distance = get_distance(best_start_location, best_end_location, distance_df)
+                adjusted_cost = total_cost * best_distance
+                
+                st.write(f"{start_location} bölümünden, {end_location} bölümüne taşınan malzeme kodları: {malzeme_kodları}")
+                st.write(f"Optimum yerleşim düzeni için {best_start_location} bölümünden {best_end_location} bölümüne taşınan malzemelerin toplam taşıma maliyeti: {adjusted_cost}")
+                
+                
+
 
 if __name__ == "__main__":
     main()
