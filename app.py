@@ -64,11 +64,20 @@ def get_distance(cıkıs, varıs, distance_df):
             return 1
     except KeyError:
         return 1
-
+        
 def main():
     st.title("Taşıma Maliyeti Hesabına Göre Değişkenlere Yerleşim Yeri Ata")
     
     uploaded_file = st.file_uploader("Excel dosyanızı yükleyin", type="xlsx")
+    
+    # Şablon Excel dosyasını indirme bağlantısını ekleyin
+    with open("YerleşimŞablon.xlsx", "rb") as file:
+        st.download_button(
+            label="Şablon Excel dosyasını indirmek için tıklayın",
+            data=file,
+            file_name="YerleşimŞablon.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     
     if uploaded_file is not None:
         df = pd.read_excel(uploaded_file, sheet_name='Sayfa1')
@@ -167,8 +176,6 @@ def main():
                 st.write(f"{start_location} bölümünden ({best_start_location}'da yer alıyor), {end_location} bölümüne ({best_end_location}'da yer alıyor) taşınan malzeme kodları: {malzeme_kodları}")
                 st.write(f"Optimum yerleşim düzeni için {start_location} bölümünden {end_location} bölümüne taşınan malzemelerin toplam taşıma maliyeti: {adjusted_cost}")
                 
-                
-
 
 if __name__ == "__main__":
     main()
