@@ -131,7 +131,7 @@ def main():
             # Malzeme koduna göre maliyet gösterimi
             st.header("Optimum Düzen İçin Malzeme Koduna Göre Taşıma Maliyeti")
 
-            selected_material = st.selectbox("Bir malzeme kodu seçin", df['malzeme kodu'].unique())
+            selected_material = st.selectbox("Bir malzeme kodu seçin", df['Malzeme Kodu'].unique())
             if selected_material:
                 selected_material_df = df[df['malzeme kodu'] == selected_material]
                 cıkıs = selected_material_df['Nereden'].values[0]
