@@ -134,8 +134,8 @@ def main():
             selected_material = st.selectbox("Bir malzeme kodu seçin", df['malzeme kodu'].unique())
             if selected_material:
                 selected_material_df = df[df['malzeme kodu'] == selected_material]
-                cıkıs = selected_material_df['nerden'].values[0]
-                varıs = selected_material_df['nereye'].values[0]# En iyi kombinasyona göre yerleşim yerleri bulun
+                cıkıs = selected_material_df['Nereden'].values[0]
+                varıs = selected_material_df['Nereye'].values[0]# En iyi kombinasyona göre yerleşim yerleri bulun
                 best_cıkıs = best_combination.get(cıkıs, cıkıs)
                 best_varıs = best_combination.get(varıs, varıs)
                 
@@ -150,8 +150,8 @@ def main():
             # Nereden Nereye Seçimi ve Malzeme Gösterimi
             st.header("Optimum Düzen İçin Bölümden Bölüme Toplam Taşıma Maliyeti")
 
-            start_location = st.selectbox("Nereden", df['nerden'].unique())
-            end_location = st.selectbox("Nereye", df['nereye'].unique())
+            start_location = st.selectbox("Nereden", df['Nereden'].unique())
+            end_location = st.selectbox("Nereye", df['Nereye'].unique())
             
             if start_location and end_location:
                 # En iyi kombinasyona göre yerleşim yeri bulun
