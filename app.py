@@ -74,7 +74,7 @@ def main():
         df = pd.read_excel(uploaded_file, sheet_name='Sayfa1')
         variables, types, components = input_data(uploaded_file)
         
-        distance_df = pd.read_excel(uploaded_file, sheet_name='Sayfa1', usecols=f'N:{chr(76 + len(types+components))}', nrows=len(types+components), index_col=0)
+        distance_df = pd.read_excel(uploaded_file, sheet_name='Sayfa1', usecols=f'N:{chr(78 + len(types+components))}', nrows=len(types+components), index_col=0)
 
         all_combinations = list(itertools.permutations(types, len(variables)))
         
